@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package tuf;
+
+message Envelope {
+  bytes payload = 1;
+  string payloadType = 2;
+  repeated Signature signatures = 3;
+}
+
+message Signature {
+  bytes sig = 1;
+  string keyid = 2;
+}
+
+message KeyValue { string public = 1; }
+
+message Key {
+  string keytype = 1;
+  string scheme = 2;
+  KeyValue keyval = 3;
+}
+
+message Role {
+  repeated string keyids = 1;
+  uint64 threshold = 2;
+}
+
+message RootRole {
+  string spec_version = 1;
+  bool consistent_snapshot = 2;
+  string expires = 3;
+  uint64 version = 4;
+  map<string, Key> keys = 5;
+  map<string, Role> roles = 6;
+}
+
+message Snapshot {
+  uint64 version = 1;
+  uint64 length = 2;
+  map<string, string> hashes = 3;
+}
+
+message SnapshotRole {
+  string spec_version = 1;
+  string expires = 3;
+  uint64 version = 4;
+  map<string, Snapshot> meta = 5;
+}
